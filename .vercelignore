@@ -1,0 +1,8 @@
+backend/
+docs/
+docker-compose.yml
+Makefile
+*.db
+*.sqlite
+.venv/
+.pytest_cache/

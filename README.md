@@ -95,6 +95,34 @@ Then open:
 
 The Docker credentials are development-only. Replace them before any deployed environment.
 
+## Deploying Frontend to Vercel
+
+The frontend is configured for deployment on [Vercel](https://vercel.com).
+
+### Option 1: Via Vercel Dashboard (GitHub Integration)
+1. Push this repository to GitHub and go to [Vercel](https://vercel.com).
+2. Click **Add New Project** and import this repository (`broke-proof`).
+3. The root [`vercel.json`](file:///Users/rithwikreddy/developer/broke-proof/vercel.json) automatically configures the Vite build (`npm install --prefix frontend && npm run build --prefix frontend`, output directory: `frontend/dist`).
+   - *Note*: If you choose to set the **Root Directory** setting in Vercel to `frontend`, [`frontend/vercel.json`](file:///Users/rithwikreddy/developer/broke-proof/frontend/vercel.json) is also included to handle SPA rewrites.
+4. Under **Environment Variables**, configure:
+   - `VITE_API_BASE`: The public URL of your deployed backend (e.g. `https://your-api.onrender.com/api` or `https://api.yourdomain.com/api`).
+5. Click **Deploy**.
+
+> [!TIP]
+> Remember to add your Vercel URL to the backend's `CORS_ORIGINS` environment variable (e.g. `CORS_ORIGINS=https://your-app.vercel.app,http://localhost:5173`) so browser requests are permitted.
+
+### Option 2: Via Vercel CLI
+```bash
+# Authenticate
+vercel login
+
+# Deploy preview
+vercel
+
+# Deploy to production
+vercel --prod
+```
+
 ## Demo account
 
 For the non-Docker SQLite setup, seed sample student spending:
