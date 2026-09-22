@@ -1,0 +1,46 @@
+services:
+  mysql:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: brokeproof
+      MYSQL_USER: brokeproof
+      MYSQL_PASSWORD: brokeproof_dev
+      MYSQL_ROOT_PASSWORD: root_dev_change_me
+    ports:
+      - "3307:3306"
+    volumes:
+      - brokeproof_mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot_dev_change_me"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: mysql+pymysql://brokeproof:brokeproof_dev@mysql:3306/brokeproof
+      SECRET_KEY: dev-only-change-me-please-use-at-least-32-bytes
+      CORS_ORIGINS: http://localhost:5173,http://localhost:8080
+      NO_SPEND_WEEKEND_DAILY_CAP: 50
+    ports:
+      - "8000:8000"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_BASE: http://localhost:8000/api
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+
+volumes:
+  brokeproof_mysql:

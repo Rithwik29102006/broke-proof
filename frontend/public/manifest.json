@@ -1,0 +1,9 @@
+{
+  "name": "Broke-Proof",
+  "short_name": "Broke-Proof",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#0f172a",
+  "description": "AI spending controller that predicts your broke date and keeps you on track."
+}
